@@ -581,6 +581,263 @@
             backdrop-filter: blur(10px);
         }
 
+        /* ====================== Pricing Section ====================== */
+.pricing-section {
+    position: relative;
+    z-index: 3;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    color: #0a0a0a;
+}
+
+.section-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    color: #52525b;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.pricing-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(240, 220, 235, 0.8) 50%,
+        rgba(215, 200, 240, 0.8) 100%);
+    border: 2px solid rgba(180, 130, 230, 0.4);
+    border-radius: 32px;
+    padding: 2.5rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(180, 130, 230, 0.2);
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.pricing-card.featured {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(240, 220, 235, 0.85) 50%,
+        rgba(215, 200, 240, 0.85) 100%);
+    border: 2px solid rgba(199, 146, 255, 0.6);
+    box-shadow: 0 20px 60px rgba(199, 146, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.pricing-card.featured:hover {
+    transform: scale(1.05) translateY(-10px);
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(199, 146, 255, 0.6);
+    box-shadow: 0 30px 60px rgba(199, 146, 255, 0.3);
+}
+
+.popular-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #FF6B9D, #FFA07A);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+.price-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(199, 146, 255, 0.3);
+}
+
+.price-header h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #8B5CF6, #FF6B9D);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+}
+
+.currency {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #8B5CF6;
+    margin-right: 0.25rem;
+}
+
+.amount {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #18181b;
+    line-height: 1;
+}
+
+.period {
+    font-size: 1.1rem;
+    color: #52525b;
+    margin-left: 0.5rem;
+}
+
+.price-description {
+    color: #52525b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.amount-text {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #18181b;
+    line-height: 1;
+}
+
+.price-features {
+    list-style: none;
+    flex-grow: 1;
+    margin-bottom: 2rem;
+}
+
+.price-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: #52525b;
+    font-size: 0.95rem;
+}
+
+.price-features li svg {
+    width: 20px;
+    height: 20px;
+    stroke: #8B5CF6;
+    flex-shrink: 0;
+}
+
+.btn-price {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.75), 
+        rgba(215, 200, 240, 0.6));
+    border: 2px solid rgba(180, 130, 230, 0.5);
+    border-radius: 20px;
+    color: #7c3aed;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    backdrop-filter: blur(10px);
+    margin-top: auto;
+}
+
+.btn-price:hover {
+    background: linear-gradient(135deg, 
+        rgba(199, 146, 255, 0.4), 
+        rgba(255, 182, 193, 0.4));
+    border-color: #C792FF;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(199, 146, 255, 0.3);
+    color: #7c3aed;
+}
+
+.btn-price.primary {
+    background: linear-gradient(135deg, #C792FF, #FF6B9D, #FFA07A);
+    color: white;
+    border: none;
+    box-shadow: 0 10px 40px rgba(199, 146, 255, 0.5);
+}
+
+.btn-price.primary:hover {
+    background: linear-gradient(135deg, #C792FF, #FF6B9D, #FFA07A);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(199, 146, 255, 0.7);
+}
+
+.pricing-footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, 
+        rgba(199, 146, 255, 0.1), 
+        rgba(255, 182, 193, 0.1));
+    border: 2px solid rgba(199, 146, 255, 0.3);
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+}
+
+.pricing-footer p {
+    font-size: 1.1rem;
+    color: #52525b;
+}
+
+.pricing-footer code {
+    background: rgba(139, 92, 246, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 8px;
+    font-family: monospace;
+    color: #8B5CF6;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .pricing-card.featured {
+        transform: scale(1);
+    }
+    
+    .pricing-card.featured:hover {
+        transform: translateY(-10px);
+    }
+    
+    .amount {
+        font-size: 3rem;
+    }
+}
+
         .watermark {
             position: absolute;
             bottom: 20px;
@@ -956,164 +1213,165 @@
         </div>
     </section>
 
-     <!-- <section class="pricing-section" id="pricing">
-        <div class="section-header">
-            <h2 class="section-title">Simple, <span class="gradient-text">Transparent</span> Pricing</h2>
-            <p class="section-subtitle">Choose the plan that works best for you</p>
+  <!-- Pricing Section -->
+<section class="pricing-section" id="pricing">
+    <div class="section-header">
+        <h2 class="section-title">Simple, <span class="gradient-text">Transparent</span> Pricing</h2>
+        <p class="section-subtitle">Choose the plan that works best for you</p>
+    </div>
+
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <div class="price-header">
+                <h3>Free Forever</h3>
+                <div class="price">
+                    <span class="currency">$</span>
+                    <span class="amount">0</span>
+                    <span class="period">/forever</span>
+                </div>
+                <p class="price-description">Perfect for getting started</p>
+            </div>
+            <ul class="price-features">
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Unlimited image generations
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    1024x1024 resolution
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Commercial use allowed
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    No watermarks
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Community support
+                </li>
+            </ul>
+            <button class="btn-price" onclick="scrollToApp()">Start Creating Free</button>
         </div>
 
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <div class="price-header">
-                    <h3>Free Forever</h3>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">0</span>
-                        <span class="period">/forever</span>
-                    </div>
-                    <p class="price-description">Perfect for getting started</p>
+        <div class="pricing-card featured">
+            <div class="popular-badge">Most Popular</div>
+            <div class="price-header">
+                <h3>Pro</h3>
+                <div class="price">
+                    <span class="currency">$</span>
+                    <span class="amount">19</span>
+                    <span class="period">/month</span>
                 </div>
-                <ul class="price-features">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Unlimited image generations
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        1024x1024 resolution
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Commercial use allowed
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        No watermarks
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Community support
-                    </li>
-                </ul>
-                <button class="btn-price" onclick="scrollToApp()">Start Creating Free</button>
+                <p class="price-description">For power users & professionals</p>
             </div>
-
-            <div class="pricing-card featured">
-                <div class="popular-badge">Most Popular</div>
-                <div class="price-header">
-                    <h3>Pro</h3>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">19</span>
-                        <span class="period">/month</span>
-                    </div>
-                    <p class="price-description">For power users & professionals</p>
-                </div>
-                <ul class="price-features">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Everything in Free
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Priority generation queue
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Up to 2048x2048 resolution
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Advanced editing tools
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        API access (1000 calls/day)
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Priority email support
-                    </li>
-                </ul>
-                <button class="btn-price primary">Upgrade to Pro</button>
-            </div>
-
-            <div class="pricing-card">
-                <div class="price-header">
-                    <h3>Enterprise</h3>
-                    <div class="price">
-                        <span class="amount-text">Custom</span>
-                    </div>
-                    <p class="price-description">For teams & large organizations</p>
-                </div>
-                <ul class="price-features">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Everything in Pro
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Unlimited API calls
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Custom model training
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Dedicated support team
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        SLA guarantees
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        On-premise deployment
-                    </li>
-                </ul>
-                <button class="btn-price">Contact Sales</button>
-            </div>
+            <ul class="price-features">
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Everything in Free
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Priority generation queue
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Up to 2048x2048 resolution
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Advanced editing tools
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    API access (1000 calls/day)
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Priority email support
+                </li>
+            </ul>
+            <button class="btn-price primary">Upgrade to Pro</button>
         </div>
 
-        <div class="pricing-footer">
-            <p>🎉 <strong>Special Launch Offer:</strong> Get 50% off Pro plan for the first 3 months. Use code <code>LAUNCH50</code></p>
+        <div class="pricing-card">
+            <div class="price-header">
+                <h3>Enterprise</h3>
+                <div class="price">
+                    <span class="amount-text">Custom</span>
+                </div>
+                <p class="price-description">For teams & large organizations</p>
+            </div>
+            <ul class="price-features">
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Everything in Pro
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Unlimited API calls
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Custom model training
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Dedicated support team
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    SLA guarantees
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    On-premise deployment
+                </li>
+            </ul>
+            <button class="btn-price">Contact Sales</button>
         </div>
-    </section> -->
+    </div>
+
+    <div class="pricing-footer">
+        <p>🎉 <strong>Special Launch Offer:</strong> Get 50% off Pro plan for the first 3 months. Use code <code>LAUNCH50</code></p>
+    </div>
+</section>
 
     <!-- App Section -->
     <section class="app-section" id="app">
