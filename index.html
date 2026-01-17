@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pollinations AI - Next-Gen Image Generation</title>
+    <title>Glowera AI - Next-Gen Image Generation</title>
     <style>
         * {
             margin: 0;
@@ -91,234 +91,186 @@
             100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
         }
 
-        /* ====================== Top Navigation ====================== */
-        .top-nav {
+        /* ====================== Stats Counters ====================== */
+        .stats-container {
             position: relative;
-            z-index: 4;
-            display: flex;
+            z-index: 3;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
             justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
-            margin: 2rem auto 2rem;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            width: fit-content;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
         }
 
-        .top-nav a {
-            text-decoration: none;
-            color: #2d3748;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
+        .stat-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9) 0%,
+                rgba(240, 220, 235, 0.8) 50%,
+                rgba(215, 200, 240, 0.8) 100%);
+            border: 2px solid rgba(199, 146, 255, 0.3);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(180, 130, 230, 0.15);
             position: relative;
-            padding: 0.4rem 0.8rem;
-            white-space: nowrap;
+            overflow: hidden;
         }
 
-        .top-nav a::after {
+        .stat-card::before {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(135deg, #C792FF 0%, #FF6B9D 100%);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                #C792FF, 
+                #FF6B9D, 
+                #FFA07A,
+                #87CEEB);
+            opacity: 0;
+            transition: opacity 0.4s;
         }
 
-        .top-nav a:hover {
-            color: #8b5cf6;
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(199, 146, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(199, 146, 255, 0.25);
         }
 
-        .top-nav a:hover::after {
-            width: 80%;
+        .stat-card:hover::before {
+            opacity: 1;
         }
-        /* ====================== Stats Counters ====================== */
-.stats-container {
-    position: relative;
-    z-index: 3;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 2rem 4rem;
-    animation: fadeInUp 1s ease-out 0.3s both;
-}
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    justify-content: center;
-}
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, 
+                #6B21A8 0%,
+                #DB2777 50%,
+                #EA580C 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: counterGlow 3s ease-in-out infinite;
+        }
 
-.stat-card {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.9) 0%,
-        rgba(240, 220, 235, 0.8) 50%,
-        rgba(215, 200, 240, 0.8) 100%);
-    border: 2px solid rgba(199, 146, 255, 0.3);
-    border-radius: 24px;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px rgba(180, 130, 230, 0.15);
-    position: relative;
-    overflow: hidden;
-}
+        @keyframes counterGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 2px 8px rgba(107, 33, 168, 0.3));
+            }
+            50% { 
+                filter: drop-shadow(0 4px 20px rgba(107, 33, 168, 0.5));
+            }
+        }
 
-.stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, 
-        #C792FF, 
-        #FF6B9D, 
-        #FFA07A,
-        #87CEEB);
-    opacity: 0;
-    transition: opacity 0.4s;
-}
+        .stat-suffix {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8B5CF6, #FF6B9D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.stat-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(199, 146, 255, 0.5);
-    box-shadow: 0 20px 40px rgba(199, 146, 255, 0.25);
-}
+        .stat-label {
+            font-size: 1.1rem;
+            color: #52525b;
+            font-weight: 600;
+            line-height: 1.4;
+        }
 
-.stat-card:hover::before {
-    opacity: 1;
-}
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, 
+                rgba(199, 146, 255, 0.15), 
+                rgba(255, 107, 157, 0.15));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(199, 146, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
 
-.stat-number {
-    font-size: 3.5rem;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, 
-        #6B21A8 0%,
-        #DB2777 50%,
-        #EA580C 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: counterGlow 3s ease-in-out infinite;
-}
+        .stat-icon::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, 
+                #C792FF, 
+                #FF6B9D, 
+                #FFA07A,
+                #87CEEB);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
 
-@keyframes counterGlow {
-    0%, 100% { 
-        filter: drop-shadow(0 2px 8px rgba(107, 33, 168, 0.3));
-    }
-    50% { 
-        filter: drop-shadow(0 4px 20px rgba(107, 33, 168, 0.5));
-    }
-}
+        .stat-card:hover .stat-icon::before {
+            opacity: 1;
+        }
 
-.stat-suffix {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #8B5CF6, #FF6B9D);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        .stat-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: #8B5CF6;
+        }
 
-.stat-label {
-    font-size: 1.1rem;
-    color: #52525b;
-    font-weight: 600;
-    line-height: 1.4;
-}
+        .stat-card:hover .stat-icon svg {
+            stroke: white;
+        }
 
-.stat-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 1.5rem;
-    background: linear-gradient(135deg, 
-        rgba(199, 146, 255, 0.15), 
-        rgba(255, 107, 157, 0.15));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid rgba(199, 146, 255, 0.3);
-    position: relative;
-    overflow: hidden;
-}
+        /* Sparkle animation for icons */
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
 
-.stat-icon::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(135deg, 
-        #C792FF, 
-        #FF6B9D, 
-        #FFA07A,
-        #87CEEB);
-    border-radius: 50%;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.4s;
-}
+        .stat-card:hover .stat-icon {
+            animation: sparkle 0.6s ease-in-out;
+        }
 
-.stat-card:hover .stat-icon::before {
-    opacity: 1;
-}
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 2.8rem;
+            }
+            
+            .stat-card {
+                padding: 1.5rem;
+            }
+        }
 
-.stat-icon svg {
-    width: 28px;
-    height: 28px;
-    stroke: #8B5CF6;
-}
-
-.stat-card:hover .stat-icon svg {
-    stroke: white;
-}
-
-/* Sparkle animation for icons */
-@keyframes sparkle {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.1) rotate(5deg); }
-}
-
-.stat-card:hover .stat-icon {
-    animation: sparkle 0.6s ease-in-out;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-    }
-    
-    .stat-number {
-        font-size: 2.8rem;
-    }
-    
-    .stat-card {
-        padding: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-        max-width: 300px;
-        margin: 0 auto;
-    }
-}
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
 
         /* Hero Section */
         .hero {
@@ -392,8 +344,7 @@
             color: #0a0a0a;
         }
 
-        
-     .gradient-text {
+        .gradient-text {
             background: linear-gradient(135deg, 
                 #6B21A8 0%,
                 #DB2777 25%,
@@ -485,6 +436,13 @@
             border-color: #C792FF;
             transform: translateY(-4px);
             box-shadow: 0 10px 30px rgba(199, 146, 255, 0.3);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: 0 4px 20px rgba(199, 146, 255, 0.2) !important;
         }
 
         /* Feature Cards */
@@ -762,261 +720,261 @@
         }
 
         /* ====================== Pricing Section ====================== */
-.pricing-section {
-    position: relative;
-    z-index: 3;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 5rem 2rem;
-}
+        .pricing-section {
+            position: relative;
+            z-index: 3;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
 
-.section-header {
-    text-align: center;
-    margin-bottom: 4rem;
-}
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
 
-.section-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 900;
-    margin-bottom: 1rem;
-    letter-spacing: -0.02em;
-    color: #0a0a0a;
-}
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            color: #0a0a0a;
+        }
 
-.section-subtitle {
-    font-size: clamp(1.1rem, 2vw, 1.3rem);
-    color: #52525b;
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
-}
+        .section-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: #52525b;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
 
-.pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
 
-.pricing-card {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.9) 0%,
-        rgba(240, 220, 235, 0.8) 50%,
-        rgba(215, 200, 240, 0.8) 100%);
-    border: 2px solid rgba(180, 130, 230, 0.4);
-    border-radius: 32px;
-    padding: 2.5rem;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(180, 130, 230, 0.2);
-    backdrop-filter: blur(15px);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
+        .pricing-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9) 0%,
+                rgba(240, 220, 235, 0.8) 50%,
+                rgba(215, 200, 240, 0.8) 100%);
+            border: 2px solid rgba(180, 130, 230, 0.4);
+            border-radius: 32px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(180, 130, 230, 0.2);
+            backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
 
-.pricing-card.featured {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.95) 0%,
-        rgba(240, 220, 235, 0.85) 50%,
-        rgba(215, 200, 240, 0.85) 100%);
-    border: 2px solid rgba(199, 146, 255, 0.6);
-    box-shadow: 0 20px 60px rgba(199, 146, 255, 0.3);
-    transform: scale(1.05);
-}
+        .pricing-card.featured {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.95) 0%,
+                rgba(240, 220, 235, 0.85) 50%,
+                rgba(215, 200, 240, 0.85) 100%);
+            border: 2px solid rgba(199, 146, 255, 0.6);
+            box-shadow: 0 20px 60px rgba(199, 146, 255, 0.3);
+            transform: scale(1.05);
+        }
 
-.pricing-card.featured:hover {
-    transform: scale(1.05) translateY(-10px);
-}
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
 
-.pricing-card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(199, 146, 255, 0.6);
-    box-shadow: 0 30px 60px rgba(199, 146, 255, 0.3);
-}
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(199, 146, 255, 0.6);
+            box-shadow: 0 30px 60px rgba(199, 146, 255, 0.3);
+        }
 
-.popular-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #FF6B9D, #FFA07A);
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    animation: badgePulse 2s ease-in-out infinite;
-}
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #FF6B9D, #FFA07A);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
 
-.price-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid rgba(199, 146, 255, 0.3);
-}
+        .price-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(199, 146, 255, 0.3);
+        }
 
-.price-header h3 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, #8B5CF6, #FF6B9D);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        .price-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #8B5CF6, #FF6B9D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.price {
-    display: flex;
-    align-items: baseline;
-    margin-bottom: 0.5rem;
-}
+        .price {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
 
-.currency {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #8B5CF6;
-    margin-right: 0.25rem;
-}
+        .currency {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #8B5CF6;
+            margin-right: 0.25rem;
+        }
 
-.amount {
-    font-size: 3.5rem;
-    font-weight: 900;
-    color: #18181b;
-    line-height: 1;
-}
+        .amount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #18181b;
+            line-height: 1;
+        }
 
-.period {
-    font-size: 1.1rem;
-    color: #52525b;
-    margin-left: 0.5rem;
-}
+        .period {
+            font-size: 1.1rem;
+            color: #52525b;
+            margin-left: 0.5rem;
+        }
 
-.price-description {
-    color: #52525b;
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
+        .price-description {
+            color: #52525b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
 
-.amount-text {
-    font-size: 3rem;
-    font-weight: 900;
-    color: #18181b;
-    line-height: 1;
-}
+        .amount-text {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #18181b;
+            line-height: 1;
+        }
 
-.price-features {
-    list-style: none;
-    flex-grow: 1;
-    margin-bottom: 2rem;
-}
+        .price-features {
+            list-style: none;
+            flex-grow: 1;
+            margin-bottom: 2rem;
+        }
 
-.price-features li {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    color: #52525b;
-    font-size: 0.95rem;
-}
+        .price-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: #52525b;
+            font-size: 0.95rem;
+        }
 
-.price-features li svg {
-    width: 20px;
-    height: 20px;
-    stroke: #8B5CF6;
-    flex-shrink: 0;
-}
+        .price-features li svg {
+            width: 20px;
+            height: 20px;
+            stroke: #8B5CF6;
+            flex-shrink: 0;
+        }
 
-.btn-price {
-    width: 100%;
-    padding: 1.2rem 2rem;
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.75), 
-        rgba(215, 200, 240, 0.6));
-    border: 2px solid rgba(180, 130, 230, 0.5);
-    border-radius: 20px;
-    color: #7c3aed;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    backdrop-filter: blur(10px);
-    margin-top: auto;
-}
+        .btn-price {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.75), 
+                rgba(215, 200, 240, 0.6));
+            border: 2px solid rgba(180, 130, 230, 0.5);
+            border-radius: 20px;
+            color: #7c3aed;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            backdrop-filter: blur(10px);
+            margin-top: auto;
+        }
 
-.btn-price:hover {
-    background: linear-gradient(135deg, 
-        rgba(199, 146, 255, 0.4), 
-        rgba(255, 182, 193, 0.4));
-    border-color: #C792FF;
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(199, 146, 255, 0.3);
-    color: #7c3aed;
-}
+        .btn-price:hover {
+            background: linear-gradient(135deg, 
+                rgba(199, 146, 255, 0.4), 
+                rgba(255, 182, 193, 0.4));
+            border-color: #C792FF;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(199, 146, 255, 0.3);
+            color: #7c3aed;
+        }
 
-.btn-price.primary {
-    background: linear-gradient(135deg, #C792FF, #FF6B9D, #FFA07A);
-    color: white;
-    border: none;
-    box-shadow: 0 10px 40px rgba(199, 146, 255, 0.5);
-}
+        .btn-price.primary {
+            background: linear-gradient(135deg, #C792FF, #FF6B9D, #FFA07A);
+            color: white;
+            border: none;
+            box-shadow: 0 10px 40px rgba(199, 146, 255, 0.5);
+        }
 
-.btn-price.primary:hover {
-    background: linear-gradient(135deg, #C792FF, #FF6B9D, #FFA07A);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(199, 146, 255, 0.7);
-}
+        .btn-price.primary:hover {
+            background: linear-gradient(135deg, #C792FF, #FF6B9D, #FFA07A);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(199, 146, 255, 0.7);
+        }
 
-.pricing-footer {
-    text-align: center;
-    margin-top: 4rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, 
-        rgba(199, 146, 255, 0.1), 
-        rgba(255, 182, 193, 0.1));
-    border: 2px solid rgba(199, 146, 255, 0.3);
-    border-radius: 24px;
-    backdrop-filter: blur(10px);
-}
+        .pricing-footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, 
+                rgba(199, 146, 255, 0.1), 
+                rgba(255, 182, 193, 0.1));
+            border: 2px solid rgba(199, 146, 255, 0.3);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
 
-.pricing-footer p {
-    font-size: 1.1rem;
-    color: #52525b;
-}
+        .pricing-footer p {
+            font-size: 1.1rem;
+            color: #52525b;
+        }
 
-.pricing-footer code {
-    background: rgba(139, 92, 246, 0.1);
-    padding: 0.25rem 0.75rem;
-    border-radius: 8px;
-    font-family: monospace;
-    color: #8B5CF6;
-    font-weight: 600;
-}
+        .pricing-footer code {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #8B5CF6;
+            font-weight: 600;
+        }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .pricing-grid {
-        grid-template-columns: 1fr;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .pricing-card.featured {
-        transform: scale(1);
-    }
-    
-    .pricing-card.featured:hover {
-        transform: translateY(-10px);
-    }
-    
-    .amount {
-        font-size: 3rem;
-    }
-}
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-10px);
+            }
+            
+            .amount {
+                font-size: 3rem;
+            }
+        }
 
         .watermark {
             position: absolute;
@@ -1196,6 +1154,7 @@
             height: 32px;
             stroke: rgba(139, 92, 246, 0.5);
         }
+        
         /* ====================== Profile Menu ====================== */
         .profile-menu {
           position: fixed;
@@ -1287,26 +1246,72 @@
           0% { opacity: 0; transform: translateY(-10px); }
           100% { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            animation: slideIn 0.3s ease-out;
+            font-weight: 500;
+            border-left: 4px solid;
+            max-width: 400px;
+        }
+        
+        .notification.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left-color: #4caf50;
+        }
+        
+        .notification.warning {
+            background: #ffeb3b;
+            color: #333;
+            border-left-color: #ff9800;
+        }
+        
+        .notification.error {
+            background: #fee;
+            color: #c62828;
+            border-left-color: #c62828;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
-    <!-- <nav class="top-nav">
-        <a href="news.html">News</a>
-        <a href="blogs.html">Blogs</a>
-        <a href="feed.html">Feed/Tools</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">T&C</a>
-        <a href="#" id="topSignLink">Sign In</a>
-    </nav> -->
-
+    <!-- Profile Menu -->
     <div class="profile-menu">
         <div class="profile-icon" id="profileIcon" title="Account">👤</div>
         <div class="dropdown" id="dropdownMenu">
             <ul>
                 <li><a href="products.html">Our Products</a></li>
                 <li><a href="submit.html" id="menuSubmitLink">Submit a Tool</a></li>
-                <li><a href="feed.html" id="menuSubmitLink">Feed/Tools</a></li>
+                <li><a href="feed.html" id="menuFeedLink">Feed/Tools</a></li>
                 <li><a href="#" id="menuSignAction">Sign In</a></li>
             </ul>
         </div>
@@ -1342,13 +1347,15 @@
                     </svg>
                     Start Creating
                 </button>
-               <button class="btn btn-secondary" onclick="openSignIn()">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-    </svg>
-    Sign In
-</button>
+                <button class="btn btn-secondary" id="heroSignInBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Sign In
+                </button>
+            </div>
+        </div>
         
         <div class="scroll-indicator">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1358,57 +1365,57 @@
     </section>
 
     <!-- Stats Counters -->
-<div class="stats-container">
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                    <path d="M21 15l-5-5L5 21"/>
-                </svg>
+    <div class="stats-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                </div>
+                <div class="stat-number" data-count="100">0</div>
+                <span class="stat-suffix">K+</span>
+                <div class="stat-label">Images Generated</div>
             </div>
-            <div class="stat-number" data-count="100">0</div>
-            <span class="stat-suffix">K+</span>
-            <div class="stat-label">Images Generated</div>
-        </div>
 
-        <div class="stat-card">
-            <div class="stat-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                </div>
+                <div class="stat-number" data-count="99.9">0</div>
+                <span class="stat-suffix">%</span>
+                <div class="stat-label">Accuracy Rate</div>
             </div>
-            <div class="stat-number" data-count="99.9">0</div>
-            <span class="stat-suffix">%</span>
-            <div class="stat-label">Accuracy Rate</div>
-        </div>
 
-        <div class="stat-card">
-            <div class="stat-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                </svg>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="stat-number" data-count="2.5">0</div>
+                <span class="stat-suffix">s</span>
+                <div class="stat-label">Avg. Generation Time</div>
             </div>
-            <div class="stat-number" data-count="2.5">0</div>
-            <span class="stat-suffix">s</span>
-            <div class="stat-label">Avg. Generation Time</div>
-        </div>
 
-        <div class="stat-card">
-            <div class="stat-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                </svg>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <div class="stat-number" data-count="50">0</div>
+                <span class="stat-suffix">K+</span>
+                <div class="stat-label">Happy Creators</div>
             </div>
-            <div class="stat-number" data-count="50">0</div>
-            <span class="stat-suffix">K+</span>
-            <div class="stat-label">Happy Creators</div>
         </div>
     </div>
-</div>
 
     <!-- Features Section -->
     <section class="features">
@@ -1445,165 +1452,165 @@
         </div>
     </section>
 
-  <!-- Pricing Section -->
-<section class="pricing-section" id="pricing">
-    <div class="section-header">
-        <h2 class="section-title">Simple, <span class="gradient-text">Transparent</span> Pricing</h2>
-        <p class="section-subtitle">Choose the plan that works best for you</p>
-    </div>
-
-    <div class="pricing-grid">
-        <div class="pricing-card">
-            <div class="price-header">
-                <h3>Free Forever</h3>
-                <div class="price">
-                    <span class="currency">$</span>
-                    <span class="amount">0</span>
-                    <span class="period">/forever</span>
-                </div>
-                <p class="price-description">Perfect for getting started</p>
-            </div>
-            <ul class="price-features">
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Unlimited image generations
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    1024x1024 resolution
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Commercial use allowed
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    No watermarks
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Community support
-                </li>
-            </ul>
-            <button class="btn-price" onclick="scrollToApp()">Start Creating Free</button>
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="section-header">
+            <h2 class="section-title">Simple, <span class="gradient-text">Transparent</span> Pricing</h2>
+            <p class="section-subtitle">Choose the plan that works best for you</p>
         </div>
 
-        <div class="pricing-card featured">
-            <div class="popular-badge">Most Popular</div>
-            <div class="price-header">
-                <h3>Pro</h3>
-                <div class="price">
-                    <span class="currency">$</span>
-                    <span class="amount">19</span>
-                    <span class="period">/month</span>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="price-header">
+                    <h3>Free Forever</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">0</span>
+                        <span class="period">/forever</span>
+                    </div>
+                    <p class="price-description">Perfect for getting started</p>
                 </div>
-                <p class="price-description">For power users & professionals</p>
+                <ul class="price-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Unlimited image generations
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        1024x1024 resolution
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Commercial use allowed
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        No watermarks
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Community support
+                    </li>
+                </ul>
+                <button class="btn-price" onclick="scrollToApp()">Start Creating Free</button>
             </div>
-            <ul class="price-features">
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Everything in Free
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Priority generation queue
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Up to 2048x2048 resolution
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Advanced editing tools
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    API access (1000 calls/day)
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Priority email support
-                </li>
-            </ul>
-            <button class="btn-price primary">Upgrade to Pro</button>
+
+            <div class="pricing-card featured">
+                <div class="popular-badge">Most Popular</div>
+                <div class="price-header">
+                    <h3>Pro</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">19</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <p class="price-description">For power users & professionals</p>
+                </div>
+                <ul class="price-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Everything in Free
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Priority generation queue
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Up to 2048x2048 resolution
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Advanced editing tools
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        API access (1000 calls/day)
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Priority email support
+                    </li>
+                </ul>
+                <button class="btn-price primary">Upgrade to Pro</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="price-header">
+                    <h3>Enterprise</h3>
+                    <div class="price">
+                        <span class="amount-text">Custom</span>
+                    </div>
+                    <p class="price-description">For teams & large organizations</p>
+                </div>
+                <ul class="price-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Everything in Pro
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Unlimited API calls
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Custom model training
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Dedicated support team
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        SLA guarantees
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        On-premise deployment
+                    </li>
+                </ul>
+                <button class="btn-price">Contact Sales</button>
+            </div>
         </div>
 
-        <div class="pricing-card">
-            <div class="price-header">
-                <h3>Enterprise</h3>
-                <div class="price">
-                    <span class="amount-text">Custom</span>
-                </div>
-                <p class="price-description">For teams & large organizations</p>
-            </div>
-            <ul class="price-features">
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Everything in Pro
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Unlimited API calls
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Custom model training
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Dedicated support team
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    SLA guarantees
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    On-premise deployment
-                </li>
-            </ul>
-            <button class="btn-price">Contact Sales</button>
+        <div class="pricing-footer">
+            <p>🎉 <strong>Special Launch Offer:</strong> Get 50% off Pro plan for the first 3 months. Use code <code>LAUNCH50</code></p>
         </div>
-    </div>
-
-    <div class="pricing-footer">
-        <p>🎉 <strong>Special Launch Offer:</strong> Get 50% off Pro plan for the first 3 months. Use code <code>LAUNCH50</code></p>
-    </div>
-</section>
+    </section>
 
     <!-- App Section -->
     <section class="app-section" id="app">
@@ -1679,7 +1686,11 @@
             </div>
         </div>
     </section>
+    
+    <!-- FIX: Remove inline onclick and update auth.js to prevent double triggers -->
     <script type="module" src="auth.js"></script>
+    
+    <!-- Main Application Script -->
     <script>
         // Create floating particles
         const particlesContainer = document.getElementById('particles');
@@ -1751,108 +1762,6 @@
                 copyBtn.disabled = false;
             };
 
-            // Animated Counter Functionality
-function animateCounters() {
-    const counters = document.querySelectorAll('.stat-number');
-    const speed = 200; // The lower the slower
-    const inViewport = (element) => {
-        const rect = element.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    };
-
-    let animated = false;
-
-    function updateCounters() {
-        if (animated) return;
-        
-        counters.forEach(counter => {
-            if (inViewport(counter)) {
-                animated = true;
-                
-                const target = +counter.getAttribute('data-count');
-                const count = +counter.innerText;
-                const increment = target / speed;
-                
-                if (count < target) {
-                    counter.innerText = Math.ceil(count + increment);
-                    setTimeout(() => updateCounters(), 1);
-                } else {
-                    counter.innerText = target;
-                    
-                    // Add decimal formatting for percentages
-                    if (counter.classList.contains('decimal')) {
-                        counter.innerText = target.toFixed(1);
-                    }
-                }
-            }
-        });
-    }
-
-    // Initial check
-    updateCounters();
-    
-    // Check on scroll
-    window.addEventListener('scroll', updateCounters);
-    
-    // Also check on load in case counters are already in view
-    window.addEventListener('load', updateCounters);
-}
-
-// Initialize counters when page loads
-document.addEventListener('DOMContentLoaded', animateCounters);
-
-// Enhanced animation with delay between counters
-function enhancedAnimateCounters() {
-    const counters = document.querySelectorAll('.stat-number');
-    const speed = 100; // Adjust speed
-    let started = false;
-
-    function startCounters() {
-        if (started) return;
-        
-        const rect = counters[0].closest('.stats-container').getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom >= 0) {
-            started = true;
-            
-            counters.forEach((counter, index) => {
-                setTimeout(() => {
-                    const target = +counter.getAttribute('data-count');
-                    const count = +counter.innerText;
-                    const increment = target / speed;
-                    let current = count;
-                    
-                    const timer = setInterval(() => {
-                        current += increment;
-                        if (current >= target) {
-                            counter.innerText = target;
-                            
-                            // Format decimal numbers
-                            if (target % 1 !== 0) {
-                                counter.innerText = target.toFixed(1);
-                            }
-                            
-                            clearInterval(timer);
-                        } else {
-                            counter.innerText = Math.floor(current);
-                        }
-                    }, 20);
-                }, index * 300); // Stagger animation
-            });
-        }
-    }
-
-    window.addEventListener('scroll', startCounters);
-    window.addEventListener('load', startCounters);
-}
-
-// Uncomment the line below for enhanced staggered animation
-// document.addEventListener('DOMContentLoaded', enhancedAnimateCounters);
-
             generatedImage.onerror = () => {
                 loader.classList.remove('active');
                 placeholder.style.display = 'block';
@@ -1905,6 +1814,75 @@ function enhancedAnimateCounters() {
                 }, 2000);
             } catch (err) {
                 console.error('Failed to copy:', err);
+            }
+        });
+
+        // Animated Counter Functionality
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200; // The lower the slower
+            const inViewport = (element) => {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            };
+
+            let animated = false;
+
+            function updateCounters() {
+                if (animated) return;
+                
+                counters.forEach(counter => {
+                    if (inViewport(counter)) {
+                        animated = true;
+                        
+                        const target = +counter.getAttribute('data-count');
+                        const count = +counter.innerText;
+                        const increment = target / speed;
+                        
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + increment);
+                            setTimeout(() => updateCounters(), 1);
+                        } else {
+                            counter.innerText = target;
+                            
+                            // Add decimal formatting for percentages
+                            if (counter.classList.contains('decimal')) {
+                                counter.innerText = target.toFixed(1);
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initial check
+            updateCounters();
+            
+            // Check on scroll
+            window.addEventListener('scroll', updateCounters);
+            
+            // Also check on load in case counters are already in view
+            window.addEventListener('load', updateCounters);
+        }
+
+        // Initialize counters when page loads
+        document.addEventListener('DOMContentLoaded', animateCounters);
+
+        // Set up hero sign-in button to work with auth.js
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroSignInBtn = document.getElementById('heroSignInBtn');
+            if (heroSignInBtn) {
+                heroSignInBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Use the global function from auth.js
+                    if (window.openSignIn) {
+                        window.openSignIn();
+                    }
+                });
             }
         });
     </script>
