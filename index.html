@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pollinations AI - Image Generator</title>
+    <title>Image AI - Image Generator</title>
     <style>
         * {
             margin: 0;
@@ -575,7 +575,7 @@
                         <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
                     </svg>
                 </div>
-                <h1>Pollinations AI</h1>
+                <h1>Image AI</h1>
             </div>
             <p class="subtitle">Transform your imagination into stunning visuals with AI</p>
         </div>
@@ -684,7 +684,7 @@
 
             const seed = Math.floor(Math.random() * 1000000);
             const encodedPrompt = encodeURIComponent(prompt);
-            currentImageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
+            currentImageUrl = `https://image.Image.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
 
             generatedImage.onload = () => {
                 loader.classList.remove('active');
@@ -728,7 +728,7 @@
             
             const link = document.createElement('a');
             link.href = currentImageUrl;
-            link.download = `pollinations-${Date.now()}.png`;
+            link.download = `Image-${Date.now()}.png`;
             link.target = '_blank';
             document.body.appendChild(link);
             link.click();
