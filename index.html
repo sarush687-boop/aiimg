@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pollinations AI - Pollinations Generator</title>
+    <title>Pollinations AI - Image Generator</title>
     <style>
         * {
             margin: 0;
@@ -27,7 +27,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-Pollinations: 
+            background-image: 
                 linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
@@ -391,8 +391,8 @@
             color: #ffffff;
         }
 
-        /* Pollinations container with advanced styling */
-        .Pollinations-container {
+        /* Image container with advanced styling */
+        .image-container {
             position: relative;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 24px;
@@ -422,14 +422,14 @@
             font-weight: 500;
         }
 
-        .generated-Pollinations {
+        .generated-image {
             width: 100%;
             height: auto;
             display: block;
-            animation: PollinationsReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: imageReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes PollinationsReveal {
+        @keyframes imageReveal {
             from {
                 opacity: 0;
                 transform: scale(0.92);
@@ -595,7 +595,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
                     </svg>
-                    Generate Pollinations
+                    Generate Image
                 </button>
 
                 <div class="example-prompts">
@@ -612,7 +612,7 @@
 
             <!-- Right Panel - Output -->
             <div class="card">
-                <div class="Pollinations-container" id="PollinationsContainer">
+                <div class="image-container" id="imageContainer">
                     <div class="placeholder" id="placeholder">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -622,7 +622,7 @@
                         <p>Your AI-generated masterpiece will appear here</p>
                     </div>
                     <div class="loader" id="loader"></div>
-                    <img id="generatedPollinations" class="generated-Pollinations" style="display: none;" alt="Generated Pollinations">
+                    <img id="generatedImage" class="generated-image" style="display: none;" alt="Generated image">
                 </div>
 
                 <div class="action-buttons">
@@ -651,10 +651,10 @@
         const generateBtn = document.getElementById('generateBtn');
         const loader = document.getElementById('loader');
         const placeholder = document.getElementById('placeholder');
-        const generatedPollinations = document.getElementById('generatedPollinations');
+        const generatedImage = document.getElementById('generatedImage');
         const downloadBtn = document.getElementById('downloadBtn');
         const copyBtn = document.getElementById('copyBtn');
-        let currentPollinationsUrl = '';
+        let currentImageUrl = '';
 
         function usePrompt(element) {
             promptInput.value = element.textContent;
@@ -664,19 +664,19 @@
         promptInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                generatePollinations();
+                generateImage();
             }
         });
 
-        generateBtn.addEventListener('click', generatePollinations);
+        generateBtn.addEventListener('click', generateImage);
 
-        async function generatePollinations() {
+        async function generateImage() {
             const prompt = promptInput.value.trim();
             if (!prompt) return;
 
             loader.classList.add('active');
             placeholder.style.display = 'none';
-            generatedPollinations.style.display = 'none';
+            generatedImage.style.display = 'none';
             generateBtn.disabled = true;
             generateBtn.innerHTML = '<span class="spinner"></span> Creating Magic...';
             downloadBtn.disabled = true;
@@ -684,23 +684,23 @@
 
             const seed = Math.floor(Math.random() * 1000000);
             const encodedPrompt = encodeURIComponent(prompt);
-            currentPollinationsUrl = `https://Pollinations.Pollinations.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
+            currentImageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
 
-            generatedPollinations.onload = () => {
+            generatedImage.onload = () => {
                 loader.classList.remove('active');
-                generatedPollinations.style.display = 'block';
+                generatedImage.style.display = 'block';
                 generateBtn.disabled = false;
                 generateBtn.innerHTML = `
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
                     </svg>
-                    Generate Pollinations
+                    Generate Image
                 `;
                 downloadBtn.disabled = false;
                 copyBtn.disabled = false;
             };
 
-            generatedPollinations.onerror = () => {
+            generatedImage.onerror = () => {
                 loader.classList.remove('active');
                 placeholder.style.display = 'block';
                 placeholder.innerHTML = `
@@ -709,26 +709,26 @@
                         <line x1="12" y1="8" x2="12" y2="12"/>
                         <line x1="12" y1="16" x2="12.01" y2="16"/>
                     </svg>
-                    <p>Failed to generate Pollinations. Please try again.</p>
+                    <p>Failed to generate image. Please try again.</p>
                 `;
                 generateBtn.disabled = false;
                 generateBtn.innerHTML = `
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
                     </svg>
-                    Generate Pollinations
+                    Generate Image
                 `;
             };
 
-            generatedPollinations.src = currentPollinationsUrl;
+            generatedImage.src = currentImageUrl;
         }
 
         downloadBtn.addEventListener('click', () => {
-            if (!currentPollinationsUrl) return;
+            if (!currentImageUrl) return;
             
             const link = document.createElement('a');
-            link.href = currentPollinationsUrl;
-            link.download = `Pollinations-${Date.now()}.png`;
+            link.href = currentImageUrl;
+            link.download = `pollinations-${Date.now()}.png`;
             link.target = '_blank';
             document.body.appendChild(link);
             link.click();
@@ -736,9 +736,9 @@
         });
 
         copyBtn.addEventListener('click', async () => {
-            if (!currentPollinationsUrl) return;
+            if (!currentImageUrl) return;
             try {
-                await navigator.clipboard.writeText(currentPollinationsUrl);
+                await navigator.clipboard.writeText(currentImageUrl);
                 const originalText = copyBtn.innerHTML;
                 copyBtn.innerHTML = `
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
