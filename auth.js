@@ -1,32 +1,34 @@
-//adas
+console.log("🚀 Initializing Glowera AI Firebase Authentication...");
 
-console.log("🚀 Initializing Firebase Authentication...");
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import { 
   getAuth, 
   GoogleAuthProvider, 
   signInWithPopup, 
   signOut, 
   onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
 
-// Firebase Configuration
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  // apiKey: "AIzaSyBJxLH8S259toa65STB7cahCRgnJ8r2Zmg",
-  apiKey: "${FIREBASE_API_KEY}",
-  authDomain: "startupgrower-bf739.firebaseapp.com",
-  projectId: "startupgrower-bf739",
-  storageBucket: "startupgrower-bf739.appspot.com",
-  messagingSenderId: "118520060569",
-  appId: "1:118520060569:web:5f0d214a50ff5546d17608",
-  measurementId: "G-LL4GLJJN3E"
+  apiKey: "AIzaSyBtjqkCgYSGxiZFULDLIC5QZXFb7kJgzJw",
+  authDomain: "imageai-9b8b8.firebaseapp.com",
+  projectId: "imageai-9b8b8",
+  storageBucket: "imageai-9b8b8.firebasestorage.app",
+  messagingSenderId: "302539017696",
+  appId: "1:302539017696:web:c25e5a22b8b87ad36aef85",
+  measurementId: "G-M6ECXN7LDG"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
+
+// Update site title for Glowera AI
+document.title = "Glowera AI - Next-Gen Image Generation";
 
 // Safe DOM element getter
 function getElement(id) {
@@ -40,43 +42,42 @@ function getElement(id) {
 // Get DOM elements safely
 const profileIcon = getElement('profileIcon');
 const dropdownMenu = getElement('dropdownMenu');
-const signinModal = getElement('signinModal');
 const menuSignAction = getElement('menuSignAction');
 const topSignLink = getElement('topSignLink');
-const modalSignBtn = getElement('modalSignBtn');
-const modalCloseBtn = getElement('modalCloseBtn');
-const submitNav = getElement('submitNav');
 const menuSubmitLink = getElement('menuSubmitLink');
-const chatbotIcon = getElement('chatbot-icon');
 
 // ==========================================
 // Authentication Functions
 // ==========================================
 
 async function signIn() {
-  if (!modalSignBtn) {
-    console.log("🔑 Sign-in triggered but no modal button found");
-    return;
-  }
-  
-  modalSignBtn.disabled = true;
-  modalSignBtn.textContent = 'Signing in...';
+  console.log('🔑 Starting Google Sign-In...');
   
   try {
     const result = await signInWithPopup(auth, provider);
     console.log('✅ User signed in:', result.user.email);
     
-    if (signinModal) {
-      signinModal.hidden = true;
+    // Close any open dropdown
+    if (dropdownMenu) {
+      dropdownMenu.classList.remove('show');
     }
+    
+    // Show welcome message
+    showNotification(`Welcome to Glowera AI, ${result.user.displayName || 'User'}!`);
+    
+    return result.user;
   } catch (error) {
     console.error('❌ Sign-in error:', error);
-    alert('Failed to sign in. Please try again.');
-  } finally {
-    if (modalSignBtn) {
-      modalSignBtn.disabled = false;
-      modalSignBtn.textContent = 'Sign in with Google';
+    
+    // User-friendly error messages
+    if (error.code === 'auth/popup-closed-by-user') {
+      showNotification('Sign-in was cancelled. Please try again.', 'warning');
+    } else if (error.code === 'auth/popup-blocked') {
+      showNotification('Popup was blocked. Please allow popups for this site.', 'warning');
+    } else {
+      showNotification('Failed to sign in. Please try again.', 'error');
     }
+    throw error;
   }
 }
 
@@ -84,30 +85,130 @@ async function signOutUser() {
   try {
     await signOut(auth);
     console.log('👋 User signed out');
+    showNotification('Signed out successfully.');
   } catch (error) {
     console.error('❌ Sign-out error:', error);
+    showNotification('Failed to sign out. Please try again.', 'error');
   }
 }
 
+function showNotification(message, type = 'success') {
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <div class="notification-content">
+      ${message}
+    </div>
+  `;
+  
+  // Add styles
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === 'error' ? '#fee' : type === 'warning' ? '#ffeb3b' : '#e8f5e9'};
+    color: ${type === 'error' ? '#c62828' : type === 'warning' ? '#333' : '#2e7d32'};
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+    font-weight: 500;
+    border-left: 4px solid ${type === 'error' ? '#c62828' : type === 'warning' ? '#ff9800' : '#4caf50'};
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Remove after 4 seconds
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease-out';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 4000);
+}
+
+// Add CSS animations for notifications
+if (!document.querySelector('#notification-styles')) {
+  const style = document.createElement('style');
+  style.id = 'notification-styles';
+  style.textContent = `
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function updateUI(user) {
-  // Only update UI if elements exist (on index.html)
+  console.log('🔄 Updating UI for user:', user ? user.email : 'No user');
+  
+  // Update profile icon
   if (profileIcon) {
     if (user) {
       const displayName = user.displayName || user.email.split('@')[0];
       const initial = displayName.charAt(0).toUpperCase();
       
       profileIcon.textContent = initial;
-      profileIcon.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+      profileIcon.style.background = 'linear-gradient(135deg, #C792FF 0%, #FF6B9D 100%)';
+      profileIcon.title = `Logged in as ${displayName}`;
       
-      if (menuSignAction) menuSignAction.textContent = 'Sign Out';
-      if (topSignLink) topSignLink.textContent = 'Sign Out';
+      if (menuSignAction) {
+        menuSignAction.textContent = 'Sign Out';
+        menuSignAction.onclick = (e) => {
+          e.preventDefault();
+          signOutUser();
+        };
+      }
+      
+      if (topSignLink) {
+        topSignLink.textContent = 'Sign Out';
+        topSignLink.onclick = (e) => {
+          e.preventDefault();
+          signOutUser();
+        };
+      }
       
     } else {
       profileIcon.textContent = '👤';
       profileIcon.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      profileIcon.title = 'Account';
       
-      if (menuSignAction) menuSignAction.textContent = 'Sign In';
-      if (topSignLink) topSignLink.textContent = 'Sign In';
+      if (menuSignAction) {
+        menuSignAction.textContent = 'Sign In';
+        menuSignAction.onclick = (e) => {
+          e.preventDefault();
+          signIn();
+        };
+      }
+      
+      if (topSignLink) {
+        topSignLink.textContent = 'Sign In';
+        topSignLink.onclick = (e) => {
+          e.preventDefault();
+          signIn();
+        };
+      }
     }
   }
 }
@@ -115,12 +216,24 @@ function updateUI(user) {
 function requireAuth(e) {
   if (!auth.currentUser) {
     e.preventDefault();
-    if (signinModal) {
-      signinModal.hidden = false;
-    } else {
-      // If on submit.html and no modal, redirect to index.html to sign in
-      window.location.href = 'index.html';
-    }
+    e.stopPropagation();
+    
+    showNotification('Please sign in to access this feature.', 'warning');
+    
+    // Try to sign in
+    setTimeout(() => {
+      signIn().then(user => {
+        if (user) {
+          // After successful sign-in, retry the action
+          const originalClick = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+          });
+          e.target.dispatchEvent(originalClick);
+        }
+      });
+    }, 1500);
   }
 }
 
@@ -128,15 +241,17 @@ function requireAuth(e) {
 // Event Listeners (only if elements exist)
 // ==========================================
 
-// Profile dropdown (only on index.html)
+// Profile dropdown toggle
 if (profileIcon && dropdownMenu) {
   profileIcon.addEventListener('click', (e) => {
     e.stopPropagation();
-    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    dropdownMenu.classList.toggle('show');
   });
 
-  document.addEventListener('click', () => {
-    dropdownMenu.style.display = 'none';
+  document.addEventListener('click', (e) => {
+    if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove('show');
+    }
   });
 
   dropdownMenu.addEventListener('click', (e) => {
@@ -144,64 +259,36 @@ if (profileIcon && dropdownMenu) {
   });
 }
 
-// Sign in/out from menu (only on index.html)
+// Sign in/out from menu
 if (menuSignAction) {
   menuSignAction.addEventListener('click', (e) => {
     e.preventDefault();
-    if (dropdownMenu) dropdownMenu.style.display = 'none';
+    if (dropdownMenu) dropdownMenu.classList.remove('show');
     
     if (auth.currentUser) {
       signOutUser();
-    } else if (signinModal) {
-      signinModal.hidden = false;
+    } else {
+      signIn();
     }
   });
 }
 
-// Sign in/out from top nav (only on index.html)
+// Sign in/out from top nav
 if (topSignLink) {
   topSignLink.addEventListener('click', (e) => {
     e.preventDefault();
     
     if (auth.currentUser) {
       signOutUser();
-    } else if (signinModal) {
-      signinModal.hidden = false;
+    } else {
+      signIn();
     }
   });
 }
 
-// Modal buttons (only on index.html)
-if (modalSignBtn) {
-  modalSignBtn.addEventListener('click', signIn);
-}
-
-if (modalCloseBtn && signinModal) {
-  modalCloseBtn.addEventListener('click', () => {
-    signinModal.hidden = true;
-  });
-}
-
-// Close modal on backdrop click (only on index.html)
-if (signinModal) {
-  signinModal.addEventListener('click', (e) => {
-    if (e.target === signinModal) {
-      signinModal.hidden = true;
-    }
-  });
-}
-
-// Protect navigation (works on both pages)
-if (submitNav) {
-  submitNav.addEventListener('click', requireAuth);
-}
-
+// Protect navigation
 if (menuSubmitLink) {
   menuSubmitLink.addEventListener('click', requireAuth);
-}
-
-if (chatbotIcon) {
-  chatbotIcon.addEventListener('click', requireAuth);
 }
 
 // ==========================================
@@ -209,25 +296,14 @@ if (chatbotIcon) {
 // ==========================================
 
 onAuthStateChanged(auth, (user) => {
-  console.log('🔄 Auth state changed:', user ? user.email : 'No user');
+  console.log('🔐 Auth state changed:', user ? `User: ${user.email}` : 'No user');
   
-  // Store user in window for other scripts - CRITICAL FIX
+  // Store user globally for other scripts
   window.currentUser = user;
   window.firebaseAuthUser = user;
+  window.gloweraUser = user;
   
   updateUI(user);
-});
-
-// ==========================================
-// First Visit Modal (only on index.html)
-// ==========================================
-
-window.addEventListener('load', () => {
-  if (signinModal && !auth.currentUser) {
-    setTimeout(() => {
-      signinModal.hidden = false;
-    }, 2000);
-  }
 });
 
 // ==========================================
@@ -235,11 +311,18 @@ window.addEventListener('load', () => {
 // ==========================================
 
 export { auth, signIn, signOutUser };
+
 export function getCurrentUser() {
   return auth.currentUser;
 }
 
+// Make functions globally available for HTML onclick handlers
+window.openSignIn = signIn;
+window.toggleProfileMenu = () => {
+  if (dropdownMenu) {
+    dropdownMenu.classList.toggle('show');
+  }
+};
+window.requireAuthGlowera = requireAuth;
 
-
-
-
+console.log("✅ Glowera AI Authentication module loaded successfully!");
