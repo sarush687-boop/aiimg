@@ -1882,9 +1882,9 @@
         // Initialize counters when page loads
         document.addEventListener('DOMContentLoaded', animateCounters);
     
-        // ==================== AUTHENTICATION CODE ====================
-        // Simple login state
-        let isLoggedIn = false;
+        // ==================== SIMPLE AUTHENTICATION CODE ====================
+        // Simple login state - check if user is logged in
+        let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     
         // Function to update both buttons
         function updateLoginButtons() {
@@ -1927,82 +1927,32 @@
             }
         }
     
-        // Function to handle button clicks - FIXED VERSION
+        // Function to handle button clicks - SIMPLE VERSION
         function handleAuthClick() {
             if (isLoggedIn) {
-                // Sign out
+                // Sign out - just sign out, no window
                 isLoggedIn = false;
+                localStorage.setItem('isLoggedIn', 'false');
                 alert('Signed out successfully!');
                 updateLoginButtons();
             } else {
-                // Sign in - open sign in window
-                const signInWindow = window.open('', '_blank', 'width=400,height=600');
-                signInWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Sign In - Glowera AI</title>
-                            <style>
-                                body {
-                                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                                    background: #f5f5f5;
-                                    margin: 0;
-                                    padding: 20px;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    min-height: 100vh;
-                                }
-                                .signin-container {
-                                    background: white;
-                                    padding: 2rem;
-                                    border-radius: 16px;
-                                    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-                                    width: 100%;
-                                    max-width: 320px;
-                                }
-                                h2 {
-                                    color: #333;
-                                    margin-bottom: 1.5rem;
-                                    text-align: center;
-                                }
-                                input {
-                                    width: 100%;
-                                    padding: 12px;
-                                    margin-bottom: 1rem;
-                                    border: 2px solid #e0e0e0;
-                                    border-radius: 8px;
-                                    font-size: 16px;
-                                }
-                                button {
-                                    width: 100%;
-                                    padding: 12px;
-                                    background: linear-gradient(135deg, #667eea, #764ba2);
-                                    color: white;
-                                    border: none;
-                                    border-radius: 8px;
-                                    font-size: 16px;
-                                    cursor: pointer;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="signin-container">
-                                <h2>Sign In</h2>
-                                <input type="text" placeholder="Username" id="username">
-                                <input type="password" placeholder="Password" id="password">
-                                <button onclick="window.opener.signInSuccess(); window.close()">Sign In</button>
-                            </div>
-                        </body>
-                    </html>
-                `);
+                // Sign in - use the existing auth.js system
+                // This will be handled by your auth.js file
+                // Just call the existing function
+                if (typeof openSignIn === 'function') {
+                    openSignIn();
+                } else {
+                    // Fallback: alert user
+                    alert('Sign in system loading...');
+                }
             }
         }
     
-        // Add this function for the sign in window to call
-        window.signInSuccess = function() {
+        // Function to handle successful sign in (called from auth.js)
+        window.handleSignInSuccess = function() {
             isLoggedIn = true;
+            localStorage.setItem('isLoggedIn', 'true');
             updateLoginButtons();
-            alert('Signed in successfully!');
         }
     
         // Set up click handlers when page loads
@@ -2010,13 +1960,11 @@
             // Update buttons on load
             updateLoginButtons();
             
-            // REMOVED THE OLD CONFLICTING EVENT LISTENER
-            
-            // Add correct click handlers
+            // Add click handlers
             const heroBtn = document.getElementById('heroSignInBtn');
             if (heroBtn) {
                 heroBtn.addEventListener('click', function(e) {
-                    e.preventDefault(); // IMPORTANT: Prevent default
+                    e.preventDefault(); // Prevent default behavior
                     handleAuthClick();
                 });
             }
