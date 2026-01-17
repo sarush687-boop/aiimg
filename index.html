@@ -17,7 +17,16 @@
             color: #0a0a0a;
             overflow-x: hidden;
         }
+        /* Add this to make Sign Out button look different */
+        .btn-secondary.signed-out {
+    background: linear-gradient(135deg, #f97316, #dc2626);
+    color: white;
+    border: none;
+        }
 
+        .btn-secondary.signed-out:hover {
+    background: linear-gradient(135deg, #ea580c, #b91c1c);
+        }
         /* Animated gradient background */
         .gradient-bg {
             position: fixed;
@@ -1886,6 +1895,83 @@
                 });
             }
         });
+        // Simple login state
+let isLoggedIn = false;
+
+// Function to update both buttons
+function updateLoginButtons() {
+    const heroBtn = document.getElementById('heroSignInBtn');
+    const menuBtn = document.getElementById('menuSignAction');
+    
+    if (isLoggedIn) {
+        // Change to Sign Out
+        if (heroBtn) {
+            heroBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Sign Out
+            `;
+            heroBtn.classList.add('signed-out');
+        }
+        
+        if (menuBtn) {
+            menuBtn.textContent = 'Sign Out';
+        }
+    } else {
+        // Change to Sign In
+        if (heroBtn) {
+            heroBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Sign In
+            `;
+            heroBtn.classList.remove('signed-out');
+        }
+        
+        if (menuBtn) {
+            menuBtn.textContent = 'Sign In';
+        }
+    }
+}
+
+// Function to handle button clicks
+function handleAuthClick() {
+    if (isLoggedIn) {
+        // Sign out
+        isLoggedIn = false;
+        alert('Signed out successfully!');
+    } else {
+        // Sign in - simple demo
+        isLoggedIn = true;
+        alert('Signed in successfully!');
+    }
+    updateLoginButtons();
+}
+
+// Set up click handlers when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Update buttons on load
+    updateLoginButtons();
+    
+    // Add click handlers
+    const heroBtn = document.getElementById('heroSignInBtn');
+    if (heroBtn) {
+        heroBtn.addEventListener('click', handleAuthClick);
+    }
+    
+    const menuBtn = document.getElementById('menuSignAction');
+    if (menuBtn) {
+        menuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            handleAuthClick();
+        });
+    }
+});
     </script>
 </body>
 </html>
