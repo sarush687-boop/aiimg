@@ -1712,11 +1712,11 @@
             particle.style.animationDuration = (15 + Math.random() * 10) + 's';
             particlesContainer.appendChild(particle);
         }
-
+    
         function scrollToApp() {
             document.getElementById('app').scrollIntoView({ behavior: 'smooth' });
         }
-
+    
         const promptInput = document.getElementById('prompt');
         const generateBtn = document.getElementById('generateBtn');
         const loader = document.getElementById('loader');
@@ -1726,25 +1726,25 @@
         const copyBtn = document.getElementById('copyBtn');
         const watermark = document.getElementById('watermark');
         let currentImageUrl = '';
-
+    
         function usePrompt(element) {
             promptInput.value = element.textContent;
             promptInput.focus();
         }
-
+    
         promptInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 generateImage();
             }
         });
-
+    
         generateBtn.addEventListener('click', generateImage);
-
+    
         async function generateImage() {
             const prompt = promptInput.value.trim();
             if (!prompt) return;
-
+    
             loader.classList.add('active');
             placeholder.style.display = 'none';
             generatedImage.style.display = 'none';
@@ -1752,11 +1752,11 @@
             generateBtn.innerHTML = '<span class="spinner"></span> Creating Magic...';
             downloadBtn.disabled = true;
             copyBtn.disabled = true;
-
+    
             const seed = Math.floor(Math.random() * 1000000);
             const encodedPrompt = encodeURIComponent(prompt);
             currentImageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
-
+    
             generatedImage.onload = () => {
                 loader.classList.remove('active');
                 generatedImage.style.display = 'block';
@@ -1771,7 +1771,7 @@
                 downloadBtn.disabled = false;
                 copyBtn.disabled = false;
             };
-
+    
             generatedImage.onerror = () => {
                 loader.classList.remove('active');
                 placeholder.style.display = 'block';
@@ -1792,10 +1792,10 @@
                     Generate Image
                 `;
             };
-
+    
             generatedImage.src = currentImageUrl;
         }
-
+    
         downloadBtn.addEventListener('click', () => {
             if (!currentImageUrl) return;
             
@@ -1807,7 +1807,7 @@
             link.click();
             document.body.removeChild(link);
         });
-
+    
         copyBtn.addEventListener('click', async () => {
             if (!currentImageUrl) return;
             try {
@@ -1826,7 +1826,7 @@
                 console.error('Failed to copy:', err);
             }
         });
-
+    
         // Animated Counter Functionality
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-number');
@@ -1840,9 +1840,9 @@
                     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
                 );
             };
-
+    
             let animated = false;
-
+    
             function updateCounters() {
                 if (animated) return;
                 
@@ -1868,7 +1868,7 @@
                     }
                 });
             }
-
+    
             // Initial check
             updateCounters();
             
@@ -1878,100 +1878,158 @@
             // Also check on load in case counters are already in view
             window.addEventListener('load', updateCounters);
         }
-
+    
         // Initialize counters when page loads
         document.addEventListener('DOMContentLoaded', animateCounters);
-
-        // Set up hero sign-in button to work with auth.js
+    
+        // ==================== AUTHENTICATION CODE ====================
+        // Simple login state
+        let isLoggedIn = false;
+    
+        // Function to update both buttons
+        function updateLoginButtons() {
+            const heroBtn = document.getElementById('heroSignInBtn');
+            const menuBtn = document.getElementById('menuSignAction');
+            
+            if (isLoggedIn) {
+                // Change to Sign Out
+                if (heroBtn) {
+                    heroBtn.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Sign Out
+                    `;
+                    heroBtn.classList.add('signed-out');
+                }
+                
+                if (menuBtn) {
+                    menuBtn.textContent = 'Sign Out';
+                }
+            } else {
+                // Change to Sign In
+                if (heroBtn) {
+                    heroBtn.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Sign In
+                    `;
+                    heroBtn.classList.remove('signed-out');
+                }
+                
+                if (menuBtn) {
+                    menuBtn.textContent = 'Sign In';
+                }
+            }
+        }
+    
+        // Function to handle button clicks - FIXED VERSION
+        function handleAuthClick() {
+            if (isLoggedIn) {
+                // Sign out
+                isLoggedIn = false;
+                alert('Signed out successfully!');
+                updateLoginButtons();
+            } else {
+                // Sign in - open sign in window
+                const signInWindow = window.open('', '_blank', 'width=400,height=600');
+                signInWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Sign In - Glowera AI</title>
+                            <style>
+                                body {
+                                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                    background: #f5f5f5;
+                                    margin: 0;
+                                    padding: 20px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    min-height: 100vh;
+                                }
+                                .signin-container {
+                                    background: white;
+                                    padding: 2rem;
+                                    border-radius: 16px;
+                                    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                                    width: 100%;
+                                    max-width: 320px;
+                                }
+                                h2 {
+                                    color: #333;
+                                    margin-bottom: 1.5rem;
+                                    text-align: center;
+                                }
+                                input {
+                                    width: 100%;
+                                    padding: 12px;
+                                    margin-bottom: 1rem;
+                                    border: 2px solid #e0e0e0;
+                                    border-radius: 8px;
+                                    font-size: 16px;
+                                }
+                                button {
+                                    width: 100%;
+                                    padding: 12px;
+                                    background: linear-gradient(135deg, #667eea, #764ba2);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 8px;
+                                    font-size: 16px;
+                                    cursor: pointer;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="signin-container">
+                                <h2>Sign In</h2>
+                                <input type="text" placeholder="Username" id="username">
+                                <input type="password" placeholder="Password" id="password">
+                                <button onclick="window.opener.signInSuccess(); window.close()">Sign In</button>
+                            </div>
+                        </body>
+                    </html>
+                `);
+            }
+        }
+    
+        // Add this function for the sign in window to call
+        window.signInSuccess = function() {
+            isLoggedIn = true;
+            updateLoginButtons();
+            alert('Signed in successfully!');
+        }
+    
+        // Set up click handlers when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            const heroSignInBtn = document.getElementById('heroSignInBtn');
-            if (heroSignInBtn) {
-                heroSignInBtn.addEventListener('click', function(e) {
+            // Update buttons on load
+            updateLoginButtons();
+            
+            // REMOVED THE OLD CONFLICTING EVENT LISTENER
+            
+            // Add correct click handlers
+            const heroBtn = document.getElementById('heroSignInBtn');
+            if (heroBtn) {
+                heroBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // IMPORTANT: Prevent default
+                    handleAuthClick();
+                });
+            }
+            
+            const menuBtn = document.getElementById('menuSignAction');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    // Use the global function from auth.js
-                    if (window.openSignIn) {
-                        window.openSignIn();
-                    }
+                    handleAuthClick();
                 });
             }
         });
-        // Simple login state
-let isLoggedIn = false;
-
-// Function to update both buttons
-function updateLoginButtons() {
-    const heroBtn = document.getElementById('heroSignInBtn');
-    const menuBtn = document.getElementById('menuSignAction');
-    
-    if (isLoggedIn) {
-        // Change to Sign Out
-        if (heroBtn) {
-            heroBtn.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Sign Out
-            `;
-            heroBtn.classList.add('signed-out');
-        }
-        
-        if (menuBtn) {
-            menuBtn.textContent = 'Sign Out';
-        }
-    } else {
-        // Change to Sign In
-        if (heroBtn) {
-            heroBtn.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                </svg>
-                Sign In
-            `;
-            heroBtn.classList.remove('signed-out');
-        }
-        
-        if (menuBtn) {
-            menuBtn.textContent = 'Sign In';
-        }
-    }
-}
-
-// Function to handle button clicks
-function handleAuthClick() {
-    if (isLoggedIn) {
-        // Sign out
-        isLoggedIn = false;
-        alert('Signed out successfully!');
-    } else {
-        // Sign in - simple demo
-        isLoggedIn = true;
-        alert('Signed in successfully!');
-    }
-    updateLoginButtons();
-}
-
-// Set up click handlers when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    // Update buttons on load
-    updateLoginButtons();
-    
-    // Add click handlers
-    const heroBtn = document.getElementById('heroSignInBtn');
-    if (heroBtn) {
-        heroBtn.addEventListener('click', handleAuthClick);
-    }
-    
-    const menuBtn = document.getElementById('menuSignAction');
-    if (menuBtn) {
-        menuBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            handleAuthClick();
-        });
-    }
-});
+        // ==================== END AUTHENTICATION CODE ====================
     </script>
 </body>
 </html>
