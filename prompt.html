@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Enhancer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .title h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .sparkle {
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            color: white;
+            margin-top: 15px;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .title h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .output-container {
+            position: relative;
+        }
+
+        #output {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .enhance-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .enhance-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .enhance-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .enhance-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            color: #667eea;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .feature-text {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .success-message {
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">
+                <svg class="sparkle" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+                    <path d="M12 2v20M2 12h20M6 6l12 12M18 6L6 18"/>
+                </svg>
+                <h1>AI Prompt Enhancer</h1>
+                <svg class="sparkle" viewBox="0 0 24 24" fill="none" stroke="#764ba2" stroke-width="2">
+                    <path d="M12 2v20M2 12h20M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </div>
+            <p class="subtitle">Transform your basic prompts into professional, detailed instructions</p>
+        </div>
+
+        <div class="main-content">
+            <div class="panel">
+                <div class="panel-label">
+                    <span class="dot"></span>
+                    Your Original Prompt
+                </div>
+                <textarea id="input" placeholder="Enter your basic prompt here... (e.g., 'Write a blog post about AI')"></textarea>
+                <button class="enhance-btn" id="enhanceBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 4V2m0 2v2m0-2h-2m2 0h2m6 6v2m-2-2h2m0 0v2m0-2h-2m-8 8v2m0-2v-2m0 2h2m-2 0h-2"/>
+                        <path d="M3 21l9-9m0 0l9-9"/>
+                    </svg>
+                    <span id="btnText">Enhance Prompt</span>
+                </button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-label">
+                    <span class="dot"></span>
+                    Enhanced Professional Prompt
+                </div>
+                <div class="output-container">
+                    <textarea id="output" readonly placeholder="Your enhanced prompt will appear here..."></textarea>
+                    <button class="copy-btn" id="copyBtn" style="display: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span id="copyBtnText">Copy</span>
+                    </button>
+                </div>
+                <div class="success-message" id="successMsg">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    Copied to clipboard!
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-text">Precise & Detailed</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">Fast Processing</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <div class="feature-text">Professional Quality</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ WARNING: Hardcoding API keys in frontend code is INSECURE.
+        // Only do this for local demos or prototypes—never in production.
+        const GROQ_API_KEY = '${context.env.GROQ_API_KEY}';
+        const input = document.getElementById('input');
+        const output = document.getElementById('output');
+        const enhanceBtn = document.getElementById('enhanceBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const btnText = document.getElementById('btnText');
+        const copyBtnText = document.getElementById('copyBtnText');
+        const successMsg = document.getElementById('successMsg');
+    
+        enhanceBtn.addEventListener('click', async () => {
+            const promptText = input.value.trim();
+            
+            if (!promptText) {
+                alert('Please enter a prompt first!');
+                return;
+            }
+    
+            enhanceBtn.disabled = true;
+            btnText.innerHTML = '<div class="loader"></div> Enhancing...';
+            output.value = '';
+            copyBtn.style.display = 'none';
+    
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${GROQ_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama-3.3-70b-versatile', // or 'llama-3.2-90b-text' if available
+                        max_tokens: 2000,
+                        temperature: 0.7,
+                        messages: [{
+                            role: 'user',
+                            content: `You are an expert prompt engineer. Your task is to take the user's basic prompt and transform it into a highly detailed, professional, and effective prompt that will yield the best possible results from an AI model.
+    
+    Enhance the following prompt by:
+    - Adding specific context and details
+    - Clarifying the desired output format
+    - Including relevant constraints or requirements
+    - Making it more structured and precise
+    - Adding examples if helpful
+    - Ensuring clarity and professionalism
+    
+    Original prompt: "${promptText}"
+    
+    Please provide ONLY the enhanced prompt without any preamble, explanation, or additional commentary. Just output the improved prompt directly.`
+                        }]
+                    })
+                });
+    
+                const data = await response.json();
+                
+                if (data.choices && data.choices[0]?.message?.content) {
+                    output.value = data.choices[0].message.content.trim();
+                    copyBtn.style.display = 'flex';
+                } else {
+                    console.error('Groq API error:', data);
+                    output.value = 'Error: Unable to enhance prompt. Please check your API key and try again.';
+                }
+            } catch (error) {
+                output.value = 'Error: Failed to connect to Groq API. Check your internet or API key.';
+                console.error('Fetch error:', error);
+            } finally {
+                enhanceBtn.disabled = false;
+                btnText.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 4V2m0 2v2m0-2h-2m2 0h2m6 6v2m-2-2h2m0 0v2m0-2h-2m-8 8v2m0-2v-2m0 2h2m-2 0h-2"/>
+                        <path d="M3 21l9-9m0 0l9-9"/>
+                    </svg>
+                    Enhance Prompt
+                `;
+            }
+        });
+    
+        copyBtn.addEventListener('click', () => {
+            output.select();
+            document.execCommand('copy');
+            
+            copyBtn.classList.add('copied');
+            copyBtnText.textContent = 'Copied!';
+            successMsg.classList.add('show');
+            
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtnText.textContent = 'Copy';
+                successMsg.classList.remove('show');
+            }, 2000);
+        });
+    
+        // Allow Enter key to enhance (with Shift+Enter for new line)
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                enhanceBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
