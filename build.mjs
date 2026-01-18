@@ -1,7 +1,6 @@
 import fs from "fs";
-
 // ===============================
-// ENVIRONMENT VARIABLES
+// ENVIRONMENT VARIABLES rebuild
 // ===============================
 const firebaseApiKey = process.env.FIREBASE_API_KEY;
 const groqApiKey = process.env.GROQ_API_KEY;
