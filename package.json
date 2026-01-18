@@ -1,0 +1,14 @@
+see this i s my package.json is it okay?
+{
+  "name": "Glowera AI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
