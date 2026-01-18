@@ -1,73 +1,20 @@
-import fs from "fs";
-// ===============================
-// ENVIRONMENT VARIABLES rebuild
-// ===============================
-const firebaseApiKey = process.env.FIREBASE_API_KEY;
+import fs from 'fs';
+
+// Get secret from environment
 const groqApiKey = process.env.GROQ_API_KEY;
 
-// ===============================
-// REQUIRED CHECKS
-// ===============================
 if (!groqApiKey) {
-  console.error("❌ GROQ_API_KEY is not set!");
+  console.error('❌ GROQ_API_KEY not set in environment!');
   process.exit(1);
 }
 
-// (Optional checks – keep for future use)
-if (firebaseApiKey === undefined) {
-  console.warn("⚠️ FIREBASE_API_KEY not set (skipping)");
-}
-if (sheetsApiKey === undefined) {
-  console.warn("⚠️ GOOGLE_SHEETS_API_KEY not set (skipping)");
-}
+// Read prompt.html
+let html = fs.readFileSync('prompt.html', 'utf8');
 
-// ===============================
-// FILES TO PROCESS (ADD MORE HERE)
-// ===============================
-const filesToProcess = [
-  "prompt.html" 
-];
+// Replace placeholder
+html = html.replace(/\$\{GROQ_API_KEY\}/g, groqApiKey);
 
-// ===============================
-// PROCESS FILES
-// ===============================
-filesToProcess.forEach((filePath) => {
-  try {
-    if (!fs.existsSync(filePath)) {
-      console.log(`⚠️ File not found: ${filePath}`);
-      return;
-    }
+// Write back
+fs.writeFileSync('prompt.html', html);
 
-    let content = fs.readFileSync(filePath, "utf8");
-
-    // Firebase
-    if (firebaseApiKey) {
-      content = content.replace(
-        /\$\{FIREBASE_API_KEY\}/g,
-        firebaseApiKey
-      );
-    }
-
-    // Google Sheets
-    if (sheetsApiKey) {
-      content = content.replace(
-        /\$\{GOOGLE_SHEETS_API_KEY\}/g,
-        sheetsApiKey
-      );
-    }
-
-    // Groq (used in prompt.html)
-    content = content.replace(
-      /\$\{GROQ_API_KEY\}/g,
-      groqApiKey
-    );
-
-    fs.writeFileSync(filePath, content, "utf8");
-    console.log(`✅ Secrets injected: ${filePath}`);
-
-  } catch (err) {
-    console.error(`❌ Error processing ${filePath}:`, err.message);
-  }
-});
-
-console.log("🚀 Glowera AI build completed successfully!");
+console.log('✅ Injected GROQ_API_KEY into prompt.html');
