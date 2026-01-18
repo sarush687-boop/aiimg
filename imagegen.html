@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Image Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #e8e8e8;
+      color: #0a0a0a;
+      padding: 2rem;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 3rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1024px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .glass-card {
+      background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.85) 0%,
+        rgba(240, 220, 235, 0.75) 50%,
+        rgba(190, 210, 240, 0.75) 100%);
+      border-radius: 32px;
+      padding: 3rem;
+      border: 2px solid rgba(180, 130, 230, 0.4);
+      box-shadow: 0 20px 60px rgba(180, 130, 230, 0.25);
+      backdrop-filter: blur(20px);
+    }
+
+    .input-group {
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      color: #18181b;
+      font-size: 1rem;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.6);
+      border: 2px solid rgba(199, 146, 255, 0.3);
+      border-radius: 24px;
+      color: #0a0a0a;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 140px;
+      font-family: inherit;
+      line-height: 1.6;
+      backdrop-filter: blur(10px);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #C792FF;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow:
+        0 0 0 4px rgba(199, 146, 255, 0.2),
+        0 10px 30px rgba(199, 146, 255, 0.25);
+    }
+
+    textarea::placeholder {
+      color: #a1a1aa;
+    }
+
+    .btn-generate {
+      width: 100%;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #C792FF, #FF6B9D, #FFA07A);
+      border: none;
+      border-radius: 24px;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      box-shadow: 0 10px 40px rgba(199, 146, 255, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-generate:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(199, 146, 255, 0.7);
+    }
+
+    .btn-generate:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .prompt-examples {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid rgba(199, 146, 255, 0.3);
+    }
+
+    .example-label {
+      font-size: 0.9rem;
+      color: #52525b;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .example-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .chip {
+      padding: 0.7rem 1.3rem;
+      background: linear-gradient(135deg,
+        rgba(240, 220, 235, 0.85),
+        rgba(215, 200, 240, 0.85));
+      border: 2px solid rgba(180, 130, 230, 0.5);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #52525b;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+    }
+
+    .chip:hover {
+      background: linear-gradient(135deg,
+        rgba(199, 146, 255, 0.5),
+        rgba(255, 182, 193, 0.5));
+      border-color: #C792FF;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(199, 146, 255, 0.4);
+      color: #7c3aed;
+    }
+
+    .image-display {
+      position: relative;
+      background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.75) 0%,
+        rgba(215, 200, 240, 0.6) 50%,
+        rgba(175, 220, 240, 0.6) 100%);
+      border-radius: 32px;
+      overflow: hidden;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(180, 130, 230, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .placeholder {
+      text-align: center;
+      color: #a1a1aa;
+      padding: 3rem;
+    }
+
+    .placeholder svg {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 2rem;
+      opacity: 0.3;
+      stroke: #a1a1aa;
+    }
+
+    .placeholder p {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .generated-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      animation: imageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes imageReveal {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+        filter: blur(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .loader {
+      display: none;
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .loader.active {
+      display: block;
+    }
+
+    .loader::before,
+    .loader::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: #8b5cf6;
+      animation: spin 1.2s linear infinite;
+    }
+
+    .loader::before {
+      width: 80px;
+      height: 80px;
+    }
+
+    .loader::after {
+      width: 60px;
+      height: 60px;
+      top: 10px;
+      left: 10px;
+      border-top-color: #ec4899;
+      animation-duration: 0.8s;
+      animation-direction: reverse;
+    }
+
+    .watermark {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, rgba(199, 146, 255, 0.9), rgba(255, 107, 157, 0.9));
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: white;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 10;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .watermark.show {
+      display: flex;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 1rem;
+      background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.75),
+        rgba(215, 200, 240, 0.6));
+      border: 2px solid rgba(180, 130, 230, 0.5);
+      border-radius: 20px;
+      color: #52525b;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-action:hover:not(:disabled) {
+      background: linear-gradient(135deg,
+        rgba(199, 146, 255, 0.4),
+        rgba(255, 182, 193, 0.4));
+      border-color: #C792FF;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(199, 146, 255, 0.3);
+      color: #7c3aed;
+    }
+
+    .btn-action:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-grid">
+    <!-- Input Panel -->
+    <div class="glass-card">
+      <div class="input-group">
+        <label for="prompt">✨ Describe Your Vision</label>
+        <textarea
+          id="prompt"
+          placeholder="A futuristic cityscape at night with neon lights reflecting on rain-soaked streets..."
+        ></textarea>
+      </div>
+      <button class="btn-generate" id="generateBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+        </svg>
+        Generate Image
+      </button>
+      <div class="prompt-examples">
+        <div class="example-label">💡 Try these prompts</div>
+        <div class="example-chips">
+          <div class="chip" onclick="usePrompt(this)">Cyberpunk city at golden hour</div>
+          <div class="chip" onclick="usePrompt(this)">Mystical forest with glowing mushrooms</div>
+          <div class="chip" onclick="usePrompt(this)">Abstract liquid metal sculpture</div>
+          <div class="chip" onclick="usePrompt(this)">Serene Japanese zen garden</div>
+          <div class="chip" onclick="usePrompt(this)">Cosmic nebula with planets</div>
+          <div class="chip" onclick="usePrompt(this)">Bioluminescent underwater cave</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="glass-card">
+      <div class="image-display" id="imageDisplay">
+        <div class="placeholder" id="placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <p>Your AI masterpiece will appear here</p>
+        </div>
+        <div class="loader" id="loader"></div>
+        <img id="generatedImage" class="generated-image" style="display: none;" alt="AI Generated">
+        <div class="watermark" id="watermark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+          </svg>
+          Glowera AI
+        </div>
+      </div>
+      <div class="action-btns">
+        <button class="btn-action" id="downloadBtn" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+        <button class="btn-action" id="copyBtn" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          Copy URL
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const promptInput = document.getElementById('prompt');
+    const generateBtn = document.getElementById('generateBtn');
+    const loader = document.getElementById('loader');
+    const placeholder = document.getElementById('placeholder');
+    const generatedImage = document.getElementById('generatedImage');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const watermark = document.getElementById('watermark');
+    let currentImageUrl = '';
+
+    function usePrompt(element) {
+      promptInput.value = element.textContent;
+      promptInput.focus();
+    }
+
+    promptInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        generateImage();
+      }
+    });
+
+    generateBtn.addEventListener('click', generateImage);
+
+    async function generateImage() {
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+
+      loader.classList.add('active');
+      placeholder.style.display = 'none';
+      generatedImage.style.display = 'none';
+      generateBtn.disabled = true;
+      generateBtn.innerHTML = '<span class="spinner"></span> Creating Magic...';
+      downloadBtn.disabled = true;
+      copyBtn.disabled = true;
+
+      const seed = Math.floor(Math.random() * 1000000);
+      const encodedPrompt = encodeURIComponent(prompt);
+      currentImageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
+
+      generatedImage.onload = () => {
+        loader.classList.remove('active');
+        generatedImage.style.display = 'block';
+        watermark.classList.add('show');
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+          </svg>
+          Generate Image
+        `;
+        downloadBtn.disabled = false;
+        copyBtn.disabled = false;
+      };
+
+      generatedImage.onerror = () => {
+        loader.classList.remove('active');
+        placeholder.style.display = 'block';
+        watermark.classList.remove('show');
+        placeholder.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p>Failed to generate image. Please try again.</p>
+        `;
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+          </svg>
+          Generate Image
+        `;
+      };
+
+      generatedImage.src = currentImageUrl;
+    }
+
+    downloadBtn.addEventListener('click', () => {
+      if (!currentImageUrl) return;
+      const link = document.createElement('a');
+      link.href = currentImageUrl;
+      link.download = `pollinations-${Date.now()}.png`;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!currentImageUrl) return;
+      try {
+        await navigator.clipboard.writeText(currentImageUrl);
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Copied!
+        `;
+        setTimeout(() => {
+          copyBtn.innerHTML = originalText;
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  </script>
+</body>
+</html>
