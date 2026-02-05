@@ -393,116 +393,147 @@
       </div>
     </div>
   </div>
+<script>
+  const promptInput = document.getElementById('prompt');
+const generateBtn = document.getElementById('generateBtn');
+const loader = document.getElementById('loader');
+const placeholder = document.getElementById('placeholder');
+const generatedImage = document.getElementById('generatedImage');
+const downloadBtn = document.getElementById('downloadBtn');
+const copyBtn = document.getElementById('copyBtn');
+const watermark = document.getElementById('watermark');
 
-  <script>
-    const promptInput = document.getElementById('prompt');
-    const generateBtn = document.getElementById('generateBtn');
-    const loader = document.getElementById('loader');
-    const placeholder = document.getElementById('placeholder');
-    const generatedImage = document.getElementById('generatedImage');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const copyBtn = document.getElementById('copyBtn');
-    const watermark = document.getElementById('watermark');
-    let currentImageUrl = '';
+let currentImageUrl = '';
+let attempts = 0;
+const MAX_RETRIES = 2;
+const LOAD_TIMEOUT = 20000;
+let timeoutId = null;
 
-    function usePrompt(element) {
-      promptInput.value = element.textContent;
-      promptInput.focus();
-    }
+function usePrompt(element) {
+  promptInput.value = element.textContent;
+  promptInput.focus();
+}
 
-    promptInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        generateImage();
-      }
-    });
+promptInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    generateImage();
+  }
+});
 
-    generateBtn.addEventListener('click', generateImage);
+generateBtn.addEventListener('click', generateImage);
 
-    async function generateImage() {
-      const prompt = promptInput.value.trim();
-      if (!prompt) return;
+function resetUI() {
+  loader.classList.remove('active');
+  generateBtn.disabled = false;
+  generateBtn.innerHTML = `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+    </svg>
+    Generate Image
+  `;
+}
 
-      loader.classList.add('active');
-      placeholder.style.display = 'none';
-      generatedImage.style.display = 'none';
-      generateBtn.disabled = true;
-      generateBtn.innerHTML = '<span class="spinner"></span> Creating Magic...';
-      downloadBtn.disabled = true;
-      copyBtn.disabled = true;
+function generateImage() {
+  const prompt = promptInput.value.trim();
+  if (!prompt) return;
 
-      const seed = Math.floor(Math.random() * 1000000);
-      const encodedPrompt = encodeURIComponent(prompt);
-      currentImageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
+  attempts = 0;
+  startLoad(prompt);
+}
 
-      generatedImage.onload = () => {
-        loader.classList.remove('active');
-        generatedImage.style.display = 'block';
-        watermark.classList.add('show');
-        generateBtn.disabled = false;
-        generateBtn.innerHTML = `
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
-          </svg>
-          Generate Image
-        `;
-        downloadBtn.disabled = false;
-        copyBtn.disabled = false;
-      };
+function startLoad(prompt) {
+  attempts++;
 
-      generatedImage.onerror = () => {
-        loader.classList.remove('active');
-        placeholder.style.display = 'block';
-        watermark.classList.remove('show');
-        placeholder.innerHTML = `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <p>Failed to generate image. Please try again.</p>
-        `;
-        generateBtn.disabled = false;
-        generateBtn.innerHTML = `
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
-          </svg>
-          Generate Image
-        `;
-      };
+  loader.classList.add('active');
+  placeholder.style.display = 'none';
+  generatedImage.style.display = 'none';
+  watermark.classList.remove('show');
+  downloadBtn.disabled = true;
+  copyBtn.disabled = true;
 
-      generatedImage.src = currentImageUrl;
-    }
+  generateBtn.disabled = true;
+  generateBtn.innerHTML = '<span class="spinner"></span> Creating Magic...';
 
-    downloadBtn.addEventListener('click', () => {
-      if (!currentImageUrl) return;
-      const link = document.createElement('a');
-      link.href = currentImageUrl;
-      link.download = `pollinations-${Date.now()}.png`;
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+  const seed = Math.floor(Math.random() * 1e9);
+  const encodedPrompt = encodeURIComponent(prompt);
 
-    copyBtn.addEventListener('click', async () => {
-      if (!currentImageUrl) return;
-      try {
-        await navigator.clipboard.writeText(currentImageUrl);
-        const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          Copied!
-        `;
-        setTimeout(() => {
-          copyBtn.innerHTML = originalText;
-        }, 2000);
-      } catch (err) {
-        console.error('Failed to copy:', err);
-      }
-    });
-  </script>
+  currentImageUrl =
+    `https://image.pollinations.ai/prompt/${encodedPrompt}` +
+    `?width=1024&height=1024&seed=${seed}&nologo=true&t=${Date.now()}`;
+
+  clearTimeout(timeoutId);
+  timeoutId = setTimeout(() => {
+    generatedImage.src = '';
+    handleFailure();
+  }, LOAD_TIMEOUT);
+
+  generatedImage.onload = () => {
+    clearTimeout(timeoutId);
+    loader.classList.remove('active');
+    generatedImage.style.display = 'block';
+    watermark.classList.add('show');
+    resetUI();
+    downloadBtn.disabled = false;
+    copyBtn.disabled = false;
+  };
+
+  generatedImage.onerror = () => {
+    clearTimeout(timeoutId);
+    handleFailure();
+  };
+
+  generatedImage.src = currentImageUrl;
+}
+
+function handleFailure() {
+  if (attempts <= MAX_RETRIES) {
+    setTimeout(() => {
+      startLoad(promptInput.value.trim());
+    }, 1200);
+    return;
+  }
+
+  loader.classList.remove('active');
+  placeholder.style.display = 'block';
+  watermark.classList.remove('show');
+  placeholder.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <p>Failed to generate image. Please try again.</p>
+  `;
+  resetUI();
+}
+
+downloadBtn.addEventListener('click', () => {
+  if (!currentImageUrl) return;
+  const link = document.createElement('a');
+  link.href = currentImageUrl;
+  link.download = `pollinations-${Date.now()}.png`;
+  link.target = '_blank';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+copyBtn.addEventListener('click', async () => {
+  if (!currentImageUrl) return;
+  try {
+    await navigator.clipboard.writeText(currentImageUrl);
+    const original = copyBtn.innerHTML;
+    copyBtn.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Copied!
+    `;
+    setTimeout(() => copyBtn.innerHTML = original, 2000);
+  } catch {}
+});
+
+</script>
 </body>
 </html>
